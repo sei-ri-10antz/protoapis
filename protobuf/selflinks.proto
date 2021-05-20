@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package protobuf;
+
+option go_package = "github.com/sei-ri/protoapis/protobuf;protobuf";
+
+message SelfLinks {
+  string self = 1;
+}

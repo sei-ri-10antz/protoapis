@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package blog.v1.services;
+
+import "protobuf/selflinks.proto";
+import "blog/v1/resources/user.proto";
+import "news/v1/resources/user.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "github.com/sei-ri/protoapis/blog/v1/services;services";
+
+service UserService {
+  rpc CreateUser (CreateUserRequest) returns (protobuf.SelfLinks) {
+    option (google.api.http) = {
+      post: "/v1/blog/users"
+      body: "*"
+    };
+  }
+  rpc GetUser (GetUserRequest) returns (GetUserResponse) {
+    option (google.api.http) = {
+      get: "/v1/{resourcs_name}/users/{id}"
+    };
+  }
+  rpc ListUsers (ListUsersRequest) returns (ListUsersResponse) {
+    option (google.api.http) = {
+      get: "/v1/{resourcs_name}/users"
+    };
+  }
+}
+
+message CreateUserRequest {
+  string email = 1 [(validate.rules).string.email = true];
+  string passwd = 2;
+}
+
+message GetUserRequest {
+  string resourcs_name = 1 [(validate.rules).string = {in: ["blog", "news"]}];
+  string id = 2 [(validate.rules).string.min_len = 1];
+}
+
+message GetUserResponse {
+  protobuf.SelfLinks links = 1;
+  oneof user {
+    blog.v1.resources.User blog = 2;
+    news.v1.resources.User news = 3;
+  }
+}
+
+message ListUsersRequest {
+  string resourcs_name = 1 [(validate.rules).string = {in: ["blog", "news"]}];
+}
+
+message ListUsersResponse {
+  protobuf.SelfLinks links = 1;
+  repeated GetUserResponse users = 2;
+}

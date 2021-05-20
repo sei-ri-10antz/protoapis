@@ -1,0 +1,8 @@
+version: v1beta1
+plugins:
+  - name: openapiv2
+    out: .
+    opt:
+      - allow_merge=true
+      - allow_repeated_fields_in_body=true
+      - json_names_for_fields=false

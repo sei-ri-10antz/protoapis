@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package news.v1.services;
+
+import "protobuf/selflinks.proto";
+import "news/v1/resources/user.proto";
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "github.com/sei-ri/protoapis/news/v1/services;services";
+
+service UserService {
+  rpc CreateUser (CreateUserRequest) returns (protobuf.SelfLinks) {
+    option (google.api.http) = {
+      post: "/v1/news/users"
+      body: "*"
+    };
+  }
+  rpc GetUser (GetUserRequest) returns (GetUserResponse) {
+    option (google.api.http) = {
+      get: "/v1/news/users/{id}"
+    };
+  }
+  rpc ListUsers (google.protobuf.Empty) returns (ListUsersResponse) {
+    option (google.api.http) = {
+      get: "/v1/news/users"
+    };
+  }
+}
+
+message CreateUserRequest {
+  string email = 1 [(validate.rules).string.email = true];
+  string passwd = 2;
+}
+
+message GetUserRequest {
+  string id = 1 [(validate.rules).string.min_len = 1];
+}
+
+message GetUserResponse {
+  protobuf.SelfLinks links = 1;
+  news.v1.resources.User user = 2;
+}
+
+message ListUsersResponse {
+  protobuf.SelfLinks links = 1;
+  repeated GetUserResponse users = 2;
+}

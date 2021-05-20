@@ -1,0 +1,14 @@
+version: v1beta1
+name: buf.build/sei-ri/protoapis
+deps:
+  - buf.build/beta/googleapis
+  - buf.build/grpc-ecosystem/grpc-gateway
+build:
+  roots:
+    - .
+lint:
+  use:
+    - BASIC
+breaking:
+  use:
+    - FILE

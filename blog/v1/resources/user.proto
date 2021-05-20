@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package blog.v1.resources;
+
+option go_package = "github.com/sei-ri/protoapis/blog/v1/resources;resources";
+
+message User {
+  string id = 1;
+  string email = 2;
+  string passwd = 3;
+}
